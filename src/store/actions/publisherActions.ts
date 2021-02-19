@@ -14,7 +14,7 @@ const url = "https://book-shelf-3f772.firebaseio.com/publishers";
 export const fetchPublishers = (): AppThunk => async (dispatch) => {
   const { data } = await axios.get(`${url}.json`);
   const publishers: Publisher[] = Object.keys(data).map((key) => {
-    return { id: key, ...data[key] };
+    return { ...data[key], id: key };
   });
 
   return dispatch({

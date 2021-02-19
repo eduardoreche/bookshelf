@@ -4,6 +4,7 @@ import { Router, RouteComponentProps, Link as ReachLink } from "@reach/router";
 
 import AuthorsScreen from "./AuthorsScreen";
 import PublishersScreen from "./PublishersScreen";
+import BooksScreen from "./BooksScreen";
 
 const MainHeader = (props: RouteComponentProps) => (
   <div>
@@ -13,6 +14,7 @@ const MainHeader = (props: RouteComponentProps) => (
 
 const AuthorRoute = (props: RouteComponentProps) => <AuthorsScreen />;
 const PublisherRoute = (props: RouteComponentProps) => <PublishersScreen />;
+const BookRoute = (props: RouteComponentProps) => <BooksScreen />;
 
 const Main: React.FC = () => {
   const menuItem = (to: string, name: string) => (
@@ -24,13 +26,14 @@ const Main: React.FC = () => {
   );
 
   return (
-    <Box w="100%" p={4}>
-      <Heading as="h1" size="4xl">
+    <Box w='100%' p={4}>
+      <Heading as='h1' size='4xl'>
         My Books
       </Heading>
 
-      <List d="flex">
+      <List d='flex'>
         {menuItem("/", "Home")}
+        {menuItem("/books", "Books")}
         {menuItem("/authors", "Authors")}
         {menuItem("/publishers", "Publishers")}
       </List>
@@ -38,9 +41,10 @@ const Main: React.FC = () => {
       <Divider />
 
       <Router>
-        <MainHeader path="/" />
-        <AuthorRoute path="/authors" />
-        <PublisherRoute path="/publishers" />
+        <MainHeader path='/' />
+        <BookRoute path='/books' />
+        <AuthorRoute path='/authors' />
+        <PublisherRoute path='/publishers' />
       </Router>
     </Box>
   );

@@ -9,7 +9,7 @@ import {
 import Author from "../../models/Author";
 
 const initialState = {
-  authors: [],
+  authors: [] as Author[],
 };
 
 const reducer = (state = initialState, action: AuthorActionTypes) => {
