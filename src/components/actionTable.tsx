@@ -35,7 +35,7 @@ const ActionTable = ({ items, columns, onEdit, onDelete }: TableProps) => {
         <Thead>
           <Tr>
             {columns.map((column) => (
-              <Th key={column}>{column}</Th>
+              <Th key={`th-${column}`}>{column}</Th>
             ))}
             <Th>Actions</Th>
           </Tr>
