@@ -9,9 +9,6 @@ const initialState = {
 };
 
 const reducer = (state = initialState, action: PublisherActionTypes) => {
-  console.log(action.type, action.payload);
-  console.log(state);
-
   switch (action.type) {
     case FETCH_PUBLISHERS:
       return { ...state, publishers: action.payload };

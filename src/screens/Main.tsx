@@ -1,14 +1,5 @@
 import React from "react";
-import {
-  Box,
-  Container,
-  Divider,
-  Heading,
-  Link,
-  List,
-  ListItem,
-  UnorderedList,
-} from "@chakra-ui/react";
+import { Box, Divider, Heading, Link, List, ListItem } from "@chakra-ui/react";
 import { Router, RouteComponentProps, Link as ReachLink } from "@reach/router";
 
 import AuthorsScreen from "./AuthorsScreen";
@@ -25,7 +16,7 @@ const PublisherRoute = (props: RouteComponentProps) => <PublishersScreen />;
 
 const Main: React.FC = () => {
   const menuItem = (to: string, name: string) => (
-    <ListItem p={4}>
+    <ListItem p={4} key={name}>
       <Link as={ReachLink} to={to}>
         {name}
       </Link>
