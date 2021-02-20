@@ -34,7 +34,7 @@ const BookAuthors = ({ authors, onChange }: BookAuthorsProps) => {
 
   const [bookAuthors, setBookAuthors] = useState<BookAuthor[]>([]);
 
-  const { register, reset, getValues, setValue } = useForm<FormType>();
+  const { register, getValues, setValue } = useForm<FormType>();
 
   useEffect(() => {
     onChange(bookAuthors);
@@ -52,8 +52,7 @@ const BookAuthors = ({ authors, onChange }: BookAuthorsProps) => {
       ]);
     }
 
-    console.log(getValues());
-    reset();
+    setValue("author", undefined);
   };
 
   const removeAuthor = (bookAuthor: BookAuthor) => {

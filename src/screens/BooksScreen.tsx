@@ -1,5 +1,5 @@
-import React, { useContext, useEffect, useRef, useState } from "react";
-import { AddIcon, DeleteIcon } from "@chakra-ui/icons";
+import React, { useEffect, useState } from "react";
+import { AddIcon } from "@chakra-ui/icons";
 import {
   Box,
   Heading,
@@ -10,15 +10,7 @@ import {
   FormControl,
   FormLabel,
   Input,
-  Select,
   Button,
-  Stack,
-  Table,
-  Tbody,
-  Td,
-  Th,
-  Thead,
-  Tr,
 } from "@chakra-ui/react";
 import { useForm } from "react-hook-form";
 import { useSelector, useDispatch } from "react-redux";
@@ -38,6 +30,7 @@ import { fetchPublishers } from "../store/actions/publisherActions";
 import TableModel from "../models/TableModel";
 import FormSelect from "../components/inputs/formSelect";
 import BookAuthors from "../components/bookAuthors";
+import BookList from "../components/bookList";
 
 const BooksScreen = () => {
   const { books } = useSelector((state: RootState) => state.books);
@@ -46,8 +39,6 @@ const BooksScreen = () => {
 
   const [book, setBook] = useState<Book | undefined>(undefined);
   const [bookAuthors, setBookAuthors] = useState<BookAuthor[]>([]);
-  const [bookAuthorType, setBookAuthorType] = useState("");
-  const [bookAuthor, setBookAuthor] = useState("");
 
   const toast = useToast();
   const authorTypes: TableModel[] = [
@@ -73,13 +64,17 @@ const BooksScreen = () => {
   }, [isInitialized, dispatch, books]);
 
   const onSubmit = async (data: Book) => {
-    console.log(data);
-    // if (data.id) await dispatch(updateBook(data));
-    // else await dispatch(addBook(data));
+    const newBook = {
+      ...data,
+      authors: bookAuthors,
+    };
 
-    // setBook(undefined);
-    // reset();
-    // showToast("Book saved", "You've succesffuly saved an book");
+    if (data.id) await dispatch(updateBook(newBook));
+    else await dispatch(addBook(newBook));
+
+    setBook(undefined);
+    reset();
+    showToast("Book saved", "You've succesffuly saved an book");
   };
 
   const onDelete = async (id: string) => {
@@ -100,7 +95,10 @@ const BooksScreen = () => {
 
   const renderAuthors = () => (
     <Box mt={3} mb={3} p={10} bg='#546177' borderRadius='lg'>
-      <BookAuthors authors={authors} onChange={(value) => console.log(value)} />
+      <BookAuthors
+        authors={authors}
+        onChange={(value) => setBookAuthors(value)}
+      />
     </Box>
   );
 
@@ -179,6 +177,8 @@ const BooksScreen = () => {
           </Box>
         </Box>
       </Flex>
+
+      <BookList books={books} />
     </Box>
   );
 };
