@@ -99,44 +99,15 @@ const BooksScreen = () => {
     });
 
   const renderAuthors = () => (
-    <Box mt={3} mb={3} w='50%' p={10} bg='#546177' borderRadius='lg'>
+    <Box mt={3} mb={3} p={10} bg='#546177' borderRadius='lg'>
       <BookAuthors authors={authors} onChange={(value) => console.log(value)} />
-
-      {/* <Box w='50%'>
-        <Table variant='striped' colorScheme='gray'>
-          <Thead>
-            <Tr>
-              <Th>Type</Th>
-              <Th>Author</Th>
-              <Th></Th>
-            </Tr>
-          </Thead>
-          <Tbody>
-            {bookAuthors.map((author) => (
-              <Tr key={author.author.id + author.type}>
-                <Td>{author.author.name}</Td>
-                <Td>{author.type}</Td>
-                <Td>
-                  <IconButton
-                    aria-label='Delete'
-                    variant='outline'
-                    colorScheme='red'
-                    onClick={() => {}}
-                    icon={<DeleteIcon />}
-                  />
-                </Td>
-              </Tr>
-            ))}
-          </Tbody>
-        </Table>
-      </Box> */}
     </Box>
   );
 
   const renderForm = () => (
     <form onSubmit={handleSubmit(onSubmit)}>
       <input type='hidden' name='id' ref={register} />
-      <FormControl id='name'>
+      <FormControl id='name' isRequired>
         <FormLabel>Name</FormLabel>
         <Input type='text' name='name' ref={register} />
       </FormControl>
