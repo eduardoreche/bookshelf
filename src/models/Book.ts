@@ -3,7 +3,7 @@ import Author from "./Author";
 import Publisher from "./Publisher";
 
 export interface BookAuthor {
-  author: Author;
+  author: string;
   credits: string[];
 }
 

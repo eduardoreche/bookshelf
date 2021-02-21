@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FormControl, Input, List, ListItem } from "@chakra-ui/react";
 
 import FormLabel from "./Label";
@@ -8,7 +8,7 @@ type AutocompleteProps = {
   name: string;
   placeholder: string;
   items: TableModel[];
-  onChange: (item: string) => void;
+  onChange?: (item: string) => void;
   register?:
     | string
     | ((instance: HTMLInputElement | null) => void)
@@ -39,8 +39,8 @@ const Autocomplete = ({
           .map((item) => item.name)
       );
 
-    onChange(value);
-  }, [value]);
+    if (onChange) onChange(value);
+  }, [value, items, onChange]);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setValue(event.target.value);

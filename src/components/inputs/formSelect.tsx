@@ -1,31 +1,17 @@
 import React from "react";
 import { FormControl, Select } from "@chakra-ui/react";
 
-import TableModel from "../../models/TableModel";
 import Label from "./Label";
 
 type FormSelectProps = {
   name: string;
   list: any[];
-  label?: string;
   reference?: any;
   value?: any;
   onChange?: (event: React.ChangeEvent<HTMLSelectElement>) => void;
 };
 
-const FormSelect = ({
-  name,
-  label,
-  list,
-  reference,
-  onChange,
-}: FormSelectProps) => {
-  const getLabel = () => {
-    if (label) return label;
-
-    return name.charAt(0).toUpperCase() + name.slice(1);
-  };
-
+const FormSelect = ({ name, list, reference, onChange }: FormSelectProps) => {
   return (
     <FormControl id={name}>
       <Label name={name} />

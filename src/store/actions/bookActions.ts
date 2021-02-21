@@ -14,7 +14,6 @@ const url = "https://book-shelf-3f772.firebaseio.com/books";
 export const fetchBooks = (): AppThunk => async (dispatch) => {
   const { data } = await axios.get(`${url}.json`);
   if (data) {
-    debugger;
     const books: Book[] = Object.keys(data).map((key) => {
       return { ...data[key], id: key };
     });
@@ -27,7 +26,8 @@ export const fetchBooks = (): AppThunk => async (dispatch) => {
 };
 
 export const addBook = (book: Book): AppThunk => async (dispatch) => {
-  const { data } = await axios.post<Book>(`${url}.json`, book);
+  const { id, ...newBook } = book;
+  const { data } = await axios.post<Book>(`${url}.json`, newBook);
   book.id = data.name;
 
   return dispatch({

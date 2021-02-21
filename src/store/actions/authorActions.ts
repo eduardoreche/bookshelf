@@ -25,6 +25,14 @@ export const fetchAuthors = (): AppThunk => async (dispatch) => {
   }
 };
 
+export const findOrCreate = (name: string): AppThunk => async (dispatch) => {
+  const { data } = await axios.get(
+    `${url}.json?orderBy="name"&startAt="${name}"&endAt="${name}"`
+  );
+
+  if (Object.values(data).length <= 0) dispatch(addAuthor({ name }));
+};
+
 export const addAuthor = (author: Author): AppThunk => async (dispatch) => {
   const { data } = await axios.post<Author>(`${url}.json`, author);
   author.id = data.name;

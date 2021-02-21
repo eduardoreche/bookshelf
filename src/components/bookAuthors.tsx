@@ -15,9 +15,9 @@ import {
 
 import Author from "../models/Author";
 import { BookAuthor } from "../models/Book";
-import FormSelect from "./inputs/formSelect";
 import { ArrowForwardIcon, CloseIcon } from "@chakra-ui/icons";
 import { useForm } from "react-hook-form";
+import Autocomplete from "./inputs/Autocomplete";
 
 type BookAuthorsProps = {
   authors: Author[];
@@ -38,37 +38,35 @@ const BookAuthors = ({ authors, onChange }: BookAuthorsProps) => {
 
   useEffect(() => {
     onChange(bookAuthors);
-  }, [bookAuthors]);
+  }, [bookAuthors, onChange]);
 
   const onSubmit = () => {
-    const data = getValues();
-    const author = authors.find((a) => a.id === data.author);
+    const { author, credits } = getValues();
     if (author) {
-      const newItem = { author, credits: data.credits };
-
       setBookAuthors([
-        ...bookAuthors.filter((ba) => ba.author.id !== author.id),
-        newItem,
+        ...bookAuthors.filter((ba) => ba.author !== author),
+        { author, credits },
       ]);
     }
 
-    setValue("author", undefined);
+    setValue("author", "");
+    setValue("credits", undefined);
   };
 
   const removeAuthor = (bookAuthor: BookAuthor) => {
     setBookAuthors(
-      bookAuthors.filter(({ author }) => author.id !== bookAuthor.author.id)
+      bookAuthors.filter(({ author }) => author !== bookAuthor.author)
     );
   };
 
   return (
     <Stack direction='row'>
       <Stack>
-        <FormSelect
-          label='Authors'
+        <Autocomplete
           name='author'
-          list={authors}
-          reference={register}
+          items={authors}
+          placeholder="Type author's name"
+          register={register}
         />
         <Stack direction='row' justifyContent='space-between'>
           <Stack spacing={5} direction='row'>
@@ -108,8 +106,8 @@ const BookAuthors = ({ authors, onChange }: BookAuthorsProps) => {
             </Thead>
             <Tbody>
               {bookAuthors.map((bookAuthor) => (
-                <Tr key={bookAuthor.author.id}>
-                  <Td>{bookAuthor.author.name}</Td>
+                <Tr key={bookAuthor.author}>
+                  <Td>{bookAuthor.author}</Td>
                   <Td>
                     {bookAuthor.credits.map((credit) => (
                       <Tag m={1} colorScheme='blue'>

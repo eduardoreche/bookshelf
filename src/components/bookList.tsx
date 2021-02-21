@@ -29,7 +29,7 @@ const BookList = ({ books }: BookListProp) => (
 
             <Stack>
               {book.authors?.map((a) => (
-                <Text key={a.author.id}>{a.author.name}</Text>
+                <Text key={a.author}>{a.author}</Text>
               ))}
             </Stack>
           </Flex>
