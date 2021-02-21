@@ -5,12 +5,15 @@ import { Router, RouteComponentProps, Link as ReachLink } from "@reach/router";
 import AuthorsScreen from "./AuthorsScreen";
 import PublishersScreen from "./PublishersScreen";
 import BooksScreen from "./BooksScreen";
+import { useSelector } from "react-redux";
+import { RootState } from "../store/reducers";
+import BookList from "../components/bookList";
 
-const MainHeader = (props: RouteComponentProps) => (
-  <div>
-    <Heading>Welcome!</Heading>
-  </div>
-);
+const MainHeader = (props: RouteComponentProps) => {
+  const { books } = useSelector((state: RootState) => state.books);
+
+  return <BookList books={books} />;
+};
 
 const AuthorRoute = (props: RouteComponentProps) => <AuthorsScreen />;
 const PublisherRoute = (props: RouteComponentProps) => <PublishersScreen />;

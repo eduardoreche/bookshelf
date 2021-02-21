@@ -1,4 +1,4 @@
 export default interface TableModel {
-  id: string;
+  id?: string;
   name: string;
 }

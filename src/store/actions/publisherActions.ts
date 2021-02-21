@@ -13,14 +13,24 @@ const url = "https://book-shelf-3f772.firebaseio.com/publishers";
 
 export const fetchPublishers = (): AppThunk => async (dispatch) => {
   const { data } = await axios.get(`${url}.json`);
-  const publishers: Publisher[] = Object.keys(data).map((key) => {
-    return { ...data[key], id: key };
-  });
+  if (data) {
+    const publishers: Publisher[] = Object.keys(data).map((key) => {
+      return { ...data[key], id: key };
+    });
 
-  return dispatch({
-    type: FETCH_PUBLISHERS,
-    payload: publishers,
-  });
+    return dispatch({
+      type: FETCH_PUBLISHERS,
+      payload: publishers,
+    });
+  }
+};
+
+export const findOrCreate = (name: string): AppThunk => async (dispatch) => {
+  const { data } = await axios.get(
+    `${url}.json?orderBy="name"&startAt="${name}"&endAt="${name}"`
+  );
+
+  if (Object.values(data).length <= 0) dispatch(addPublisher({ name }));
 };
 
 export const addPublisher = (publisher: Publisher): AppThunk => async (

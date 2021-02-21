@@ -26,11 +26,16 @@ import { RootState } from "../store/reducers";
 import Publisher from "../models/Publisher";
 import Author from "../models/Author";
 import { fetchAuthors } from "../store/actions/authorActions";
-import { fetchPublishers } from "../store/actions/publisherActions";
+import {
+  addPublisher,
+  fetchPublishers,
+  findOrCreate,
+} from "../store/actions/publisherActions";
 import TableModel from "../models/TableModel";
 import FormSelect from "../components/inputs/formSelect";
 import BookAuthors from "../components/bookAuthors";
 import BookList from "../components/bookList";
+import Autocomplete from "../components/inputs/Autocomplete";
 
 const BooksScreen = () => {
   const { books } = useSelector((state: RootState) => state.books);
@@ -39,19 +44,14 @@ const BooksScreen = () => {
 
   const [book, setBook] = useState<Book | undefined>(undefined);
   const [bookAuthors, setBookAuthors] = useState<BookAuthor[]>([]);
+  const [publisher, setPublisher] = useState<string>("");
 
   const toast = useToast();
-  const authorTypes: TableModel[] = [
-    { id: "story", name: "Story" },
-    { id: "art", name: "Art" },
-    { id: "colors", name: "Colors" },
-    { id: "letter", name: "Letter" },
-  ];
 
   const [isInitialized, setIsInitialized] = useState(false);
   const dispatch = useDispatch();
 
-  const { register, handleSubmit, setValue, reset } = useForm<Book>();
+  const { register, handleSubmit, reset } = useForm<Book>();
 
   useEffect(() => {
     if (!isInitialized) {
@@ -64,17 +64,21 @@ const BooksScreen = () => {
   }, [isInitialized, dispatch, books]);
 
   const onSubmit = async (data: Book) => {
+    console.log(data);
+
+    dispatch(findOrCreate(data.publisher));
     const newBook = {
       ...data,
       authors: bookAuthors,
+      // publisher: findOrCreatePublisher(),
     };
 
-    if (data.id) await dispatch(updateBook(newBook));
-    else await dispatch(addBook(newBook));
+    // if (data.id) await dispatch(updateBook(newBook));
+    // else await dispatch(addBook(newBook));
 
-    setBook(undefined);
-    reset();
-    showToast("Book saved", "You've succesffuly saved an book");
+    // setBook(undefined);
+    // reset();
+    // showToast("Book saved", "You've succesffuly saved an book");
   };
 
   const onDelete = async (id: string) => {
@@ -112,7 +116,13 @@ const BooksScreen = () => {
 
       {renderAuthors()}
 
-      <FormSelect name='publisher' list={publishers} reference={register} />
+      <Autocomplete
+        name='publisher'
+        items={publishers}
+        placeholder="Type publisher's name"
+        onChange={(value) => setPublisher(value)}
+        register={register}
+      />
 
       <FormControl id='language'>
         <FormLabel>Language</FormLabel>

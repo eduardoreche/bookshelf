@@ -1,7 +1,8 @@
 import React from "react";
-import { FormControl, FormLabel, Select } from "@chakra-ui/react";
+import { FormControl, Select } from "@chakra-ui/react";
 
 import TableModel from "../../models/TableModel";
+import Label from "./Label";
 
 type FormSelectProps = {
   name: string;
@@ -27,7 +28,7 @@ const FormSelect = ({
 
   return (
     <FormControl id={name}>
-      <FormLabel>{getLabel()}</FormLabel>
+      <Label name={name} />
       <Select
         name={name}
         placeholder='Select option'

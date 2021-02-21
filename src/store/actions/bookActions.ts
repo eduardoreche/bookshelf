@@ -13,14 +13,17 @@ const url = "https://book-shelf-3f772.firebaseio.com/books";
 
 export const fetchBooks = (): AppThunk => async (dispatch) => {
   const { data } = await axios.get(`${url}.json`);
-  const books: Book[] = Object.keys(data).map((key) => {
-    return { id: key, ...data[key] };
-  });
+  if (data) {
+    debugger;
+    const books: Book[] = Object.keys(data).map((key) => {
+      return { ...data[key], id: key };
+    });
 
-  return dispatch({
-    type: FETCH_BOOKS,
-    payload: books,
-  });
+    return dispatch({
+      type: FETCH_BOOKS,
+      payload: books,
+    });
+  }
 };
 
 export const addBook = (book: Book): AppThunk => async (dispatch) => {

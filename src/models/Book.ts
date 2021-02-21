@@ -9,7 +9,7 @@ export interface BookAuthor {
 
 export default interface Book extends TableModel {
   authors: BookAuthor[];
-  publisher: Publisher;
+  publisher: string;
   language: string;
   printing: number;
   price?: number;

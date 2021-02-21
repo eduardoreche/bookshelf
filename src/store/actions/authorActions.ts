@@ -13,14 +13,16 @@ const url = "https://book-shelf-3f772.firebaseio.com/authors";
 
 export const fetchAuthors = (): AppThunk => async (dispatch) => {
   const { data } = await axios.get(`${url}.json`);
-  const authors: Author[] = Object.keys(data).map((key) => {
-    return { ...data[key], id: key };
-  });
+  if (data) {
+    const authors: Author[] = Object.keys(data).map((key) => {
+      return { ...data[key], id: key };
+    });
 
-  return dispatch({
-    type: FETCH_AUTHORS,
-    payload: authors,
-  });
+    return dispatch({
+      type: FETCH_AUTHORS,
+      payload: authors,
+    });
+  }
 };
 
 export const addAuthor = (author: Author): AppThunk => async (dispatch) => {
