@@ -34,13 +34,15 @@ import {
 import BookAuthors from "../components/bookAuthors";
 import BookList from "../components/bookList";
 import Autocomplete from "../components/inputs/Autocomplete";
+import { RouteComponentProps } from "@reach/router";
 
-const BooksScreen = () => {
+const BooksScreen = ({ path, uri }: RouteComponentProps) => {
   const { books } = useSelector((state: RootState) => state.books);
   const { publishers } = useSelector((state: RootState) => state.publishers);
   const { authors } = useSelector((state: RootState) => state.authors);
 
   const [book, setBook] = useState<Book | undefined>(undefined);
+  const [shouldClear, setShouldClear] = useState(false);
   const [bookAuthors, setBookAuthors] = useState<BookAuthor[]>([]);
 
   const toast = useToast();
@@ -52,6 +54,9 @@ const BooksScreen = () => {
 
   useEffect(() => {
     if (!isInitialized) {
+      console.log("PATH" + path);
+      console.log("URI", uri);
+
       dispatch(fetchBooks());
       dispatch(fetchAuthors());
       dispatch(fetchPublishers());
@@ -61,7 +66,8 @@ const BooksScreen = () => {
   }, [isInitialized, dispatch, books]);
 
   const onSubmit = async (data: Book) => {
-    bookAuthors.map((a) => authorsFindOrCreate(a.author));
+    debugger;
+    bookAuthors.map((a) => dispatch(authorsFindOrCreate(a.author)));
     dispatch(publishersFindOrCreate(data.publisher));
     const newBook = {
       ...data,
@@ -73,6 +79,7 @@ const BooksScreen = () => {
 
     setBook(undefined);
     reset();
+    setShouldClear(true);
     showToast("Book saved", "You've succesffuly saved an book");
   };
 
@@ -97,6 +104,7 @@ const BooksScreen = () => {
       <BookAuthors
         authors={authors}
         onChange={(value) => setBookAuthors(value)}
+        shouldClear={shouldClear}
       />
     </Box>
   );
@@ -116,6 +124,7 @@ const BooksScreen = () => {
         items={publishers}
         placeholder="Type publisher's name"
         register={register}
+        clear={shouldClear}
       />
 
       <FormControl id='language'>
@@ -182,7 +191,11 @@ const BooksScreen = () => {
         </Box>
       </Flex>
 
-      <BookList books={books} />
+      <BookList
+        books={books}
+        onEdit={(book) => setBook(book)}
+        onDelete={(id) => console.log("delete", id)}
+      />
     </Box>
   );
 };

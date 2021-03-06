@@ -26,6 +26,7 @@ export const fetchAuthors = (): AppThunk => async (dispatch) => {
 };
 
 export const findOrCreate = (name: string): AppThunk => async (dispatch) => {
+  debugger;
   const { data } = await axios.get(
     `${url}.json?orderBy="name"&startAt="${name}"&endAt="${name}"`
   );

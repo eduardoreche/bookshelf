@@ -22,6 +22,7 @@ import Autocomplete from "./inputs/Autocomplete";
 type BookAuthorsProps = {
   authors: Author[];
   onChange: (bookAuthors: BookAuthor[]) => void;
+  shouldClear: boolean;
 };
 
 type FormType = {
@@ -29,7 +30,7 @@ type FormType = {
   credits: string[];
 };
 
-const BookAuthors = ({ authors, onChange }: BookAuthorsProps) => {
+const BookAuthors = ({ authors, onChange, shouldClear }: BookAuthorsProps) => {
   const authorCredits: string[] = ["Story", "Art", "Colors", "Letter", "Cover"];
 
   const [bookAuthors, setBookAuthors] = useState<BookAuthor[]>([]);
@@ -39,6 +40,12 @@ const BookAuthors = ({ authors, onChange }: BookAuthorsProps) => {
   useEffect(() => {
     onChange(bookAuthors);
   }, [bookAuthors, onChange]);
+
+  useEffect(() => {
+    if (shouldClear) {
+      setBookAuthors([]);
+    }
+  }, [shouldClear]);
 
   const onSubmit = () => {
     const { author, credits } = getValues();
@@ -67,6 +74,7 @@ const BookAuthors = ({ authors, onChange }: BookAuthorsProps) => {
           items={authors}
           placeholder="Type author's name"
           register={register}
+          clear={shouldClear}
         />
         <Stack direction='row' justifyContent='space-between'>
           <Stack spacing={5} direction='row'>

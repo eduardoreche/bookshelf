@@ -8,6 +8,7 @@ type AutocompleteProps = {
   name: string;
   placeholder: string;
   items: TableModel[];
+  clear: boolean;
   onChange?: (item: string) => void;
   register?:
     | string
@@ -22,6 +23,7 @@ const Autocomplete = ({
   placeholder,
   items,
   onChange,
+  clear,
   register,
 }: AutocompleteProps) => {
   const [filteredList, setFilteredList] = useState<string[]>([]);
@@ -41,6 +43,10 @@ const Autocomplete = ({
 
     if (onChange) onChange(value);
   }, [value, items, onChange]);
+
+  useEffect(() => {
+    if (clear) setValue("");
+  }, [clear]);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setValue(event.target.value);
