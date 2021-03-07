@@ -1,87 +1,62 @@
-import React, { useState, useEffect } from "react";
-import {
-  Box,
-  Button,
-  FormControl,
-  FormErrorMessage,
-  FormLabel,
-  Heading,
-  Input,
-  Text,
-  Link,
-} from "@chakra-ui/react";
-import { useForm } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
-import * as yup from "yup";
-import { Link as ReachLink, useNavigate } from "@reach/router";
+import { useState } from 'react';
+import { Flex, Heading } from '@chakra-ui/react';
 
-import { useAuth } from "../context/AuthContext";
+import LoginForm from '../components/auth/loginForm';
+import SignupForm from '../components/auth/signupForm';
+import ForgotForm from '../components/auth/forgotForm';
 
-interface IFormInputs {
-  email: string;
-  password: string;
-}
+const LogInScreen = () => {
+  const [currentForm, setCurrentForm] = useState('login');
 
-const schema = yup.object().shape({
-  email: yup.string().email().required(),
-  password: yup.string().min(8).required(),
-});
-
-const LogInScreen: React.FC = () => {
-  const [loading, setLoading] = useState(false);
-  const { login } = useAuth();
-  const navigate = useNavigate();
-
-  const { register, handleSubmit, errors } = useForm<IFormInputs>({
-    resolver: yupResolver(schema),
-  });
-
-  const onSubmit = async ({ email, password }: IFormInputs) => {
-    setLoading(true);
-
-    await login(email, password);
-    navigate("/");
-
-    setLoading(false);
-  };
+  const showSignUpForm = () => setCurrentForm('signup');
+  const showLoginForm = () => setCurrentForm('login');
+  const showForgot = () => setCurrentForm('forgot');
 
   return (
-    <Box w={400}>
-      <Heading as='h4' size='4xl'>
-        Log In
-      </Heading>
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <FormControl id='email' isInvalid={!!errors.email} required>
-          <FormLabel>Email</FormLabel>
-          <Input type='text' name='email' ref={register} />
-          <FormErrorMessage>{errors.email?.message}</FormErrorMessage>
-        </FormControl>
-
-        <FormControl id='password' isInvalid={!!errors.password} required>
-          <FormLabel>Password</FormLabel>
-          <Input type='password' name='password' ref={register} />
-          <FormErrorMessage>{errors.password?.message}</FormErrorMessage>
-        </FormControl>
-
-        <Button mt={10} colorScheme='blue' type='submit' disabled={loading}>
-          Log In
-        </Button>
-      </form>
-
-      <Box>
-        Forgot your password? &nbsp;
-        <Link as={ReachLink} to='/forgot'>
-          Click here!
-        </Link>
-      </Box>
-
-      <Box>
-        Doesn't have an account? &nbsp;
-        <Link as={ReachLink} to='/signup'>
-          Sign Up!
-        </Link>
-      </Box>
-    </Box>
+    <Flex flex='1 1 0%' alignItems='center' p='32px' direction='column'>
+      <Flex
+        flex='1 1 0%'
+        justifyContent='center'
+        alignItems='center'
+        width='100%'
+        padding='28px 0px 50px'
+      >
+        <Flex
+          borderRadius={10}
+          w={480}
+          h={480}
+          m={10}
+          alignItems='center'
+          justifyContent='center'
+          direction='column'
+        >
+          <Heading size='lg'>Welcome to</Heading>
+          <Heading size='3xl'>Book Shelf</Heading>
+        </Flex>
+        <Flex
+          borderRadius={10}
+          w={480}
+          h={480}
+          backgroundColor='gray.600'
+          color='black'
+          p={16}
+          flexDirection='column'
+        >
+          {currentForm === 'login' && (
+            <LoginForm
+              onSignupClick={showSignUpForm}
+              onForgotClick={showForgot}
+            />
+          )}
+          {currentForm === 'signup' && (
+            <SignupForm onLoginClick={showLoginForm} />
+          )}
+          {currentForm === 'forgot' && (
+            <ForgotForm onLoginClick={showLoginForm} />
+          )}
+        </Flex>
+      </Flex>
+    </Flex>
   );
 };
 

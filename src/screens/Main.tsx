@@ -1,19 +1,26 @@
-import React, { useEffect } from "react";
-import { Box, Divider, Heading, Link, List, ListItem } from "@chakra-ui/react";
-import { Router, RouteComponentProps, Link as ReachLink } from "@reach/router";
+import React, { useEffect } from 'react';
+import {
+  Box,
+  Flex,
+  Divider,
+  Heading,
+  Link,
+  List,
+  ListItem,
+  Text,
+} from '@chakra-ui/react';
+import { Router, RouteComponentProps, Link as ReachLink } from '@reach/router';
 
-import AuthorsScreen from "./AuthorsScreen";
-import SignUpScreen from "./SignUpScreen";
-import ForgotPasswordScreen from "./ForgotPasswordScreen";
-import PublishersScreen from "./PublishersScreen";
-import BooksScreen from "./BooksScreen";
-import LoginScreen from "./LoginScreen";
+import AuthorsScreen from './AuthorsScreen';
+import PublishersScreen from './PublishersScreen';
+import BooksScreen from './BooksScreen';
+import LoginScreen from './LoginScreen';
 
-import BookList from "../components/bookList";
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../store/reducers";
-import { fetchBooks } from "../store/actions/bookActions";
-import { useAuth } from "../context/AuthContext";
+import BookList from '../components/bookList';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from '../store/reducers';
+import { fetchBooks } from '../store/actions/bookActions';
+import { useAuth } from '../context/AuthContext';
 
 const MainHeader = (props: RouteComponentProps) => {
   const { books } = useSelector((state: RootState) => state.books);
@@ -25,12 +32,10 @@ const AuthorRoute = (props: RouteComponentProps) => <AuthorsScreen />;
 const PublisherRoute = (props: RouteComponentProps) => <PublishersScreen />;
 const BookRoute = (props: RouteComponentProps) => <BooksScreen />;
 const LoginRoute = (props: RouteComponentProps) => <LoginScreen />;
-const SignUpRoute = (props: RouteComponentProps) => <SignUpScreen />;
-const ForgotRoute = (props: RouteComponentProps) => <ForgotPasswordScreen />;
 
 const Main: React.FC = () => {
   const dispatch = useDispatch();
-  const { currentUser, logout } = useAuth();
+  const { currentUser, logout, isLogingIn } = useAuth();
 
   useEffect(() => {
     dispatch(fetchBooks());
@@ -45,24 +50,24 @@ const Main: React.FC = () => {
   );
 
   const privateRoutes = () => (
-    <Box w='100%' p={4}>
+    <Box w='100%' h='100%' p={4} id='main'>
       <Heading as='h1' size='4xl'>
         My Books ({currentUser.email})
       </Heading>
 
       <List d='flex'>
-        {menuItem("/", "Home")}
-        {menuItem("/books", "Books")}
-        {menuItem("/authors", "Authors")}
-        {menuItem("/publishers", "Publishers")}
-        <ListItem p={4} key={"logout"}>
+        {menuItem('/', 'Home')}
+        {menuItem('/books', 'Books')}
+        {menuItem('/authors', 'Authors')}
+        {menuItem('/publishers', 'Publishers')}
+        <ListItem p={4} key={'logout'}>
           <Link onClick={() => logout()}>Logout</Link>
         </ListItem>
       </List>
 
       <Divider />
 
-      <Router>
+      <Router component={React.Fragment}>
         <MainHeader path='/' />
         <BookRoute path='/books' />
         <AuthorRoute path='/authors' />
@@ -72,13 +77,11 @@ const Main: React.FC = () => {
   );
 
   const publicRoutes = () => (
-    <Box w='100%' p={4}>
-      <Router>
-        <SignUpRoute path='/signup' />
-        <ForgotRoute path='/forgot' />
+    <Flex direction='column' minHeight='100vh' alignItems='center'>
+      <Router component={React.Fragment}>
         <LoginRoute path='/login' default />
       </Router>
-    </Box>
+    </Flex>
   );
 
   return currentUser ? privateRoutes() : publicRoutes();
