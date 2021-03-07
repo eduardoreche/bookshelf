@@ -1,18 +1,21 @@
-import axios from "axios";
+import axios from 'axios';
 
-import Publisher from "../../models/Publisher";
+import Publisher from '../../models/Publisher';
 import {
   FETCH_PUBLISHERS,
   ADD_PUBLISHER,
   UPDATE_PUBLISHER,
   DELETE_PUBLISHER,
-} from "../types/publisherTypes";
-import { AppThunk } from "../types/appThunk";
+} from '../types/publisherTypes';
+import { AppThunk } from '../types/appThunk';
+import { getUrl } from './utils';
 
-const url = "https://book-shelf-3f772.firebaseio.com/publishers";
+const COLLECTION_NAME = 'publishers';
 
 export const fetchPublishers = (): AppThunk => async (dispatch) => {
-  const { data } = await axios.get(`${url}.json`);
+  const url = await getUrl(COLLECTION_NAME);
+
+  const { data } = await axios.get(url);
   if (data) {
     const publishers: Publisher[] = Object.keys(data).map((key) => {
       return { ...data[key], id: key };
@@ -26,8 +29,10 @@ export const fetchPublishers = (): AppThunk => async (dispatch) => {
 };
 
 export const findOrCreate = (name: string): AppThunk => async (dispatch) => {
+  const url = await getUrl(COLLECTION_NAME);
+
   const { data } = await axios.get(
-    `${url}.json?orderBy="name"&startAt="${name}"&endAt="${name}"`
+    `${url}&orderBy="name"&startAt="${name}"&endAt="${name}"`
   );
 
   if (Object.values(data).length <= 0) dispatch(addPublisher({ name }));
@@ -36,7 +41,9 @@ export const findOrCreate = (name: string): AppThunk => async (dispatch) => {
 export const addPublisher = (publisher: Publisher): AppThunk => async (
   dispatch
 ) => {
-  const { data } = await axios.post<Publisher>(`${url}.json`, publisher);
+  const url = await getUrl(COLLECTION_NAME);
+
+  const { data } = await axios.post<Publisher>(url, publisher);
   publisher.id = data.name;
 
   return dispatch({
@@ -49,7 +56,9 @@ export const updatePublisher = (publisher: Publisher): AppThunk => async (
   dispatch
 ) => {
   const { id, ...rest } = publisher;
-  await axios.put<Publisher>(`${url}/${publisher.id}.json`, rest);
+  const url = await getUrl(COLLECTION_NAME, id);
+
+  await axios.put<Publisher>(url, rest);
 
   return dispatch({
     type: UPDATE_PUBLISHER,
@@ -58,7 +67,9 @@ export const updatePublisher = (publisher: Publisher): AppThunk => async (
 };
 
 export const deletePublisher = (id: string): AppThunk => async (dispatch) => {
-  await axios.delete(`${url}/${id}.json`);
+  const url = await getUrl(COLLECTION_NAME, id);
+
+  await axios.delete(url);
 
   return dispatch({
     type: DELETE_PUBLISHER,

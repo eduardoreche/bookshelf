@@ -1,0 +1,32 @@
+{
+  "rules": {
+    "books": {
+      ".read": "false",
+      ".write": "false",
+      "$id": {
+        ".write": "auth.uid === $id",
+        ".read": "auth.uid === $id",
+      }
+    },
+      
+    "publishers": {
+      ".read": "false",
+      ".write": "false",
+      "$id": {
+        ".write": "auth.uid === $id",
+        ".read": "auth.uid === $id",
+        ".indexOn": "name"
+      }
+    },
+      
+    "authors": {
+			".read": "false",
+      ".write": "false",
+      "$id": {
+        ".write": "auth.uid === $id",
+        ".read": "auth.uid === $id",
+        ".indexOn": "name"
+      }
+    }
+  }
+}

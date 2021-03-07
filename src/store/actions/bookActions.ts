@@ -1,18 +1,21 @@
-import axios from "axios";
+import axios from 'axios';
 
-import Book from "../../models/Book";
+import Book from '../../models/Book';
 import {
   FETCH_BOOKS,
   ADD_BOOK,
   UPDATE_BOOK,
   DELETE_BOOK,
-} from "../types/bookTypes";
-import { AppThunk } from "../types/appThunk";
+} from '../types/bookTypes';
+import { AppThunk } from '../types/appThunk';
+import { getUrl } from './utils';
 
-const url = "https://book-shelf-3f772.firebaseio.com/books";
+const COLLECTION_NAME = 'books';
 
 export const fetchBooks = (): AppThunk => async (dispatch) => {
-  const { data } = await axios.get(`${url}.json`);
+  const url = await getUrl(COLLECTION_NAME);
+
+  const { data } = await axios.get(url);
   if (data) {
     const books: Book[] = Object.keys(data).map((key) => {
       return { ...data[key], id: key };
@@ -27,7 +30,9 @@ export const fetchBooks = (): AppThunk => async (dispatch) => {
 
 export const addBook = (book: Book): AppThunk => async (dispatch) => {
   const { id, ...newBook } = book;
-  const { data } = await axios.post<Book>(`${url}.json`, newBook);
+  const url = await getUrl(COLLECTION_NAME);
+
+  const { data } = await axios.post<Book>(url, newBook);
   book.id = data.name;
 
   return dispatch({
@@ -38,7 +43,8 @@ export const addBook = (book: Book): AppThunk => async (dispatch) => {
 
 export const updateBook = (book: Book): AppThunk => async (dispatch) => {
   const { id, ...rest } = book;
-  await axios.put<Book>(`${url}/${book.id}.json`, rest);
+  const url = await getUrl(COLLECTION_NAME, id);
+  await axios.put<Book>(url, rest);
 
   return dispatch({
     type: UPDATE_BOOK,
@@ -47,7 +53,8 @@ export const updateBook = (book: Book): AppThunk => async (dispatch) => {
 };
 
 export const deleteBook = (id: string): AppThunk => async (dispatch) => {
-  await axios.delete(`${url}/${id}.json`);
+  const url = await getUrl(COLLECTION_NAME, id);
+  await axios.delete(url);
 
   return dispatch({
     type: DELETE_BOOK,

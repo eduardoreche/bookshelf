@@ -36,10 +36,6 @@ const LogInScreen: React.FC = () => {
     resolver: yupResolver(schema),
   });
 
-  useEffect(() => {
-    if (errors) console.log(errors);
-  }, [errors]);
-
   const onSubmit = async ({ email, password }: IFormInputs) => {
     setLoading(true);
 

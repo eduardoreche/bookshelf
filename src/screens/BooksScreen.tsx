@@ -54,9 +54,6 @@ const BooksScreen = ({ path, uri }: RouteComponentProps) => {
 
   useEffect(() => {
     if (!isInitialized) {
-      console.log("PATH" + path);
-      console.log("URI", uri);
-
       dispatch(fetchBooks());
       dispatch(fetchAuthors());
       dispatch(fetchPublishers());
