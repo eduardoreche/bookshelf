@@ -17,7 +17,12 @@ import Header from '../components/header';
 const MainHeader = (props: RouteComponentProps) => {
   const { books } = useSelector((state: RootState) => state.books);
 
-  return <BookList books={books} />;
+  return (
+    <>
+      <Header />
+      <BookList books={books} />
+    </>
+  );
 };
 
 const AuthorRoute = (props: RouteComponentProps) => <AuthorsScreen />;
@@ -34,22 +39,17 @@ const Main: React.FC = () => {
   }, []);
 
   const privateRoutes = () => (
-    <>
-      <Header />
-      <Box w='100%' h='100%' p={4} id='main'>
-        <Router component={React.Fragment}>
-          <MainHeader path='/' />
-          <BookRoute path='/books' />
-          <AuthorRoute path='/authors' />
-          <PublisherRoute path='/publishers' />
-        </Router>
-      </Box>
-    </>
+    <Router>
+      <MainHeader path='/' />
+      <BookRoute path='/books' />
+      <AuthorRoute path='/authors' />
+      <PublisherRoute path='/publishers' />
+    </Router>
   );
 
   const publicRoutes = () => (
     <Flex direction='column' minHeight='100vh' alignItems='center'>
-      <Router component={React.Fragment}>
+      <Router>
         <LoginRoute path='/login' default />
       </Router>
     </Flex>

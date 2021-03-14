@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import {
   FormControl,
   FormLabel,
@@ -12,21 +12,23 @@ import {
   useToast,
   IconButton,
   Text,
-} from "@chakra-ui/react";
-import { useForm } from "react-hook-form";
-import ActionTable from "../components/actionTable";
+} from '@chakra-ui/react';
+import { useForm } from 'react-hook-form';
+import ActionTable from '../components/actionTable';
 
-import { CountryContext } from "../context/CountryContext";
-import Publisher from "../models/Publisher";
+import { CountryContext } from '../context/CountryContext';
+import Publisher from '../models/Publisher';
 import {
   addPublisher,
   deletePublisher,
   fetchPublishers,
   updatePublisher,
-} from "../store/actions/publisherActions";
-import { RootState } from "../store/reducers";
-import { useContext } from "react";
-import { AddIcon } from "@chakra-ui/icons";
+} from '../store/actions/publisherActions';
+import { RootState } from '../store/reducers';
+import { useContext } from 'react';
+import { AddIcon } from '@chakra-ui/icons';
+import Header from '../components/header';
+import PageLayout from '../components/pageLayout';
 
 const PublisherForm: React.FC = () => {
   const { publishers } = useSelector((state: RootState) => state.publishers);
@@ -46,9 +48,9 @@ const PublisherForm: React.FC = () => {
   }, [isInitialized, dispatch, publishers]);
 
   useEffect(() => {
-    setValue("id", publisher ? publisher.id : undefined);
-    setValue("name", publisher ? publisher.name : undefined);
-    setValue("country", publisher ? publisher.country : undefined);
+    setValue('id', publisher ? publisher.id : undefined);
+    setValue('name', publisher ? publisher.name : undefined);
+    setValue('country', publisher ? publisher.country : undefined);
   }, [publisher, setValue]);
 
   const onSubmit = async (data: Publisher) => {
@@ -58,33 +60,33 @@ const PublisherForm: React.FC = () => {
     setPublisher(undefined);
     reset();
 
-    showToast("Publisher saved", "You've succesffuly saved a publisher");
+    showToast('Publisher saved', "You've succesffuly saved a publisher");
   };
 
   const onDelete = (id: string) => {
     setPublisher(undefined);
     dispatch(deletePublisher(id));
 
-    showToast("Publisher deleted", "You've succesffuly deleted a publisher");
+    showToast('Publisher deleted', "You've succesffuly deleted a publisher");
   };
 
   const showToast = (title: string, description: string) =>
     toast({
       title,
       description,
-      status: "success",
+      status: 'success',
       duration: 3000,
       isClosable: true,
-      position: "bottom-left",
+      position: 'bottom-left',
     });
 
   return (
-    <Box>
+    <PageLayout>
       <Heading>Publishers</Heading>
 
       <Flex justifyContent='space-between'>
         <Text fontSize='2xl' mr={10}>
-          {publisher ? "Edit" : "New"} Publisher
+          {publisher ? 'Edit' : 'New'} Publisher
         </Text>
 
         <IconButton
@@ -133,13 +135,13 @@ const PublisherForm: React.FC = () => {
         <Box flex='9' ml={20}>
           <ActionTable
             items={publishers}
-            columns={["name", "country"]}
+            columns={['name', 'country']}
             onEdit={(publisher: Publisher) => setPublisher(publisher)}
             onDelete={onDelete}
           />
         </Box>
       </Flex>
-    </Box>
+    </PageLayout>
   );
 };
 

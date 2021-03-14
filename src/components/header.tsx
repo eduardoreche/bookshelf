@@ -1,5 +1,9 @@
 import React from 'react';
-import { useNavigate } from '@reach/router';
+import {
+  useNavigate,
+  Link as ReactRouterLink,
+  LinkGetProps,
+} from '@reach/router';
 import {
   Box,
   Button,
@@ -23,8 +27,37 @@ import {
   FaUserCircle,
 } from 'react-icons/fa';
 import { SearchIcon } from '@chakra-ui/icons';
+import { IconType } from 'react-icons/lib';
+
+type HeaderLinkProp = {
+  linkTo: string;
+  description: string;
+  icon: IconType;
+};
+
+export const HeaderLink = ({ linkTo, description, icon }: HeaderLinkProp) => {
+  const isCurrentLink = ({ isCurrent }: LinkGetProps): any => ({
+    style: {
+      color: isCurrent ? '#FAF089' : 'white',
+    },
+  });
+
+  return (
+    <Link
+      as={ReactRouterLink}
+      getProps={isCurrentLink}
+      to={linkTo}
+      mx={2}
+      color='yellow'
+    >
+      <Icon as={icon} w={6} h={6} mx={2} /> {description}
+    </Link>
+  );
+};
 
 const Header = () => {
+  const navigate = useNavigate();
+
   return (
     <Flex p={5} backgroundColor='black' flexDirection='row'>
       <Heading mr={10}>Book Shelf</Heading>
@@ -35,37 +68,18 @@ const Header = () => {
         alignItems='center'
         fontSize='lg'
       >
-        <Button
-          leftIcon={<Icon as={FaHome} fontSize='xl' />}
-          variant='ghost'
-          onClick={() => null}
-        >
-          Home
-        </Button>
-
-        <Button
-          leftIcon={<Icon as={FaBook} fontSize='xl' />}
-          variant='ghost'
-          onClick={() => null}
-        >
-          Books
-        </Button>
-
-        <Button
-          leftIcon={<Icon as={FaPencilAlt} fontSize='xl' />}
-          variant='ghost'
-          onClick={() => null}
-        >
-          Authors
-        </Button>
-
-        <Button
-          leftIcon={<Icon as={FaPrint} fontSize='xl' />}
-          variant='ghost'
-          onClick={() => null}
-        >
-          Publishers
-        </Button>
+        <HeaderLink linkTo='/' description='Home' icon={FaHome} />
+        <HeaderLink linkTo='/books' description='Books' icon={FaBook} />
+        <HeaderLink
+          linkTo='/authors'
+          description='Authors'
+          icon={FaPencilAlt}
+        />
+        <HeaderLink
+          linkTo='/publishers'
+          description='Publishers'
+          icon={FaPrint}
+        />
       </Flex>
 
       <Spacer />

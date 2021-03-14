@@ -1,5 +1,5 @@
-import React, { useContext, useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import React, { useContext, useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import {
   FormControl,
   FormLabel,
@@ -12,20 +12,22 @@ import {
   useToast,
   IconButton,
   Text,
-} from "@chakra-ui/react";
-import { useForm } from "react-hook-form";
-import ActionTable from "../components/actionTable";
+} from '@chakra-ui/react';
+import { useForm } from 'react-hook-form';
+import ActionTable from '../components/actionTable';
 
-import { CountryContext } from "../context/CountryContext";
-import Author from "../models/Author";
+import { CountryContext } from '../context/CountryContext';
+import Author from '../models/Author';
 import {
   addAuthor,
   deleteAuthor,
   fetchAuthors,
   updateAuthor,
-} from "../store/actions/authorActions";
-import { RootState } from "../store/reducers";
-import { AddIcon } from "@chakra-ui/icons";
+} from '../store/actions/authorActions';
+import { RootState } from '../store/reducers';
+import { AddIcon } from '@chakra-ui/icons';
+import Header from '../components/header';
+import PageLayout from '../components/pageLayout';
 
 const AuthorForm: React.FC = () => {
   const { authors } = useSelector((state: RootState) => state.authors);
@@ -44,9 +46,9 @@ const AuthorForm: React.FC = () => {
   }, [isInitialized, dispatch, authors]);
 
   useEffect(() => {
-    setValue("id", author?.id);
-    setValue("name", author?.name);
-    setValue("country", author?.country);
+    setValue('id', author?.id);
+    setValue('name', author?.name);
+    setValue('country', author?.country);
   }, [author, setValue]);
 
   const onSubmit = async (data: Author) => {
@@ -55,32 +57,32 @@ const AuthorForm: React.FC = () => {
 
     setAuthor(undefined);
     reset();
-    showToast("Author saved", "You've succesffuly saved an author");
+    showToast('Author saved', "You've succesffuly saved an author");
   };
 
   const onDelete = async (id: string) => {
     await setAuthor(undefined);
     dispatch(deleteAuthor(id));
-    showToast("Delete author", "You've succesffuly deleted an author");
+    showToast('Delete author', "You've succesffuly deleted an author");
   };
 
   const showToast = (title: string, description: string) =>
     toast({
       title,
       description,
-      status: "success",
+      status: 'success',
       duration: 3000,
       isClosable: true,
-      position: "bottom-left",
+      position: 'bottom-left',
     });
 
   return (
-    <Box>
+    <PageLayout>
       <Heading>Authors</Heading>
 
       <Flex justifyContent='space-between'>
         <Text fontSize='2xl' mr={10}>
-          {author ? "Edit" : "New"} Author
+          {author ? 'Edit' : 'New'} Author
         </Text>
 
         <IconButton
@@ -129,13 +131,13 @@ const AuthorForm: React.FC = () => {
         <Box flex='9' ml={20}>
           <ActionTable
             items={authors}
-            columns={["name", "country"]}
+            columns={['name', 'country']}
             onEdit={(author: Author) => setAuthor(author)}
             onDelete={onDelete}
           />
         </Box>
       </Flex>
-    </Box>
+    </PageLayout>
   );
 };
 

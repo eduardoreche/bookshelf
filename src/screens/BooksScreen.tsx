@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { AddIcon } from "@chakra-ui/icons";
+import React, { useEffect, useState } from 'react';
+import { AddIcon } from '@chakra-ui/icons';
 import {
   Box,
   Heading,
@@ -11,30 +11,32 @@ import {
   FormLabel,
   Input,
   Button,
-} from "@chakra-ui/react";
-import { useForm } from "react-hook-form";
-import { useSelector, useDispatch } from "react-redux";
+} from '@chakra-ui/react';
+import { useForm } from 'react-hook-form';
+import { useSelector, useDispatch } from 'react-redux';
 
 import {
   fetchBooks,
   updateBook,
   addBook,
   deleteBook,
-} from "../store/actions/bookActions";
-import Book, { BookAuthor } from "../models/Book";
-import { RootState } from "../store/reducers";
+} from '../store/actions/bookActions';
+import Book, { BookAuthor } from '../models/Book';
+import { RootState } from '../store/reducers';
 import {
   fetchAuthors,
   findOrCreate as authorsFindOrCreate,
-} from "../store/actions/authorActions";
+} from '../store/actions/authorActions';
 import {
   fetchPublishers,
   findOrCreate as publishersFindOrCreate,
-} from "../store/actions/publisherActions";
-import BookAuthors from "../components/bookAuthors";
-import BookList from "../components/bookList";
-import Autocomplete from "../components/inputs/Autocomplete";
-import { RouteComponentProps } from "@reach/router";
+} from '../store/actions/publisherActions';
+import BookAuthors from '../components/bookAuthors';
+import BookList from '../components/bookList';
+import Autocomplete from '../components/inputs/Autocomplete';
+import { RouteComponentProps } from '@reach/router';
+import Header from '../components/header';
+import PageLayout from '../components/pageLayout';
 
 const BooksScreen = ({ path, uri }: RouteComponentProps) => {
   const { books } = useSelector((state: RootState) => state.books);
@@ -77,23 +79,23 @@ const BooksScreen = ({ path, uri }: RouteComponentProps) => {
     setBook(undefined);
     reset();
     setShouldClear(true);
-    showToast("Book saved", "You've succesffuly saved an book");
+    showToast('Book saved', "You've succesffuly saved an book");
   };
 
   const onDelete = async (id: string) => {
     await setBook(undefined);
     dispatch(deleteBook(id));
-    showToast("Delete book", "You've succesffuly deleted an book");
+    showToast('Delete book', "You've succesffuly deleted an book");
   };
 
   const showToast = (title: string, description: string) =>
     toast({
       title,
       description,
-      status: "success",
+      status: 'success',
       duration: 3000,
       isClosable: true,
-      position: "bottom-left",
+      position: 'bottom-left',
     });
 
   const renderAuthors = () => (
@@ -164,12 +166,12 @@ const BooksScreen = ({ path, uri }: RouteComponentProps) => {
   );
 
   return (
-    <Box>
+    <PageLayout>
       <Heading>Books</Heading>
 
       <Flex justifyContent='space-between'>
         <Text fontSize='2xl' mr={10}>
-          {book ? "Edit" : "New"} Book
+          {book ? 'Edit' : 'New'} Book
         </Text>
 
         <IconButton
@@ -191,9 +193,9 @@ const BooksScreen = ({ path, uri }: RouteComponentProps) => {
       <BookList
         books={books}
         onEdit={(book) => setBook(book)}
-        onDelete={(id) => console.log("delete", id)}
+        onDelete={(id) => console.log('delete', id)}
       />
-    </Box>
+    </PageLayout>
   );
 };
 
