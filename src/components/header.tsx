@@ -1,16 +1,8 @@
-import React from 'react';
+import { Link as ReactRouterLink, LinkGetProps } from '@reach/router';
 import {
-  useNavigate,
-  Link as ReactRouterLink,
-  LinkGetProps,
-} from '@reach/router';
-import {
-  Box,
-  Button,
   Flex,
   Heading,
   Icon,
-  IconButton,
   Input,
   InputGroup,
   InputLeftElement,
@@ -20,7 +12,6 @@ import {
 } from '@chakra-ui/react';
 import {
   FaBook,
-  FaBookDead,
   FaHome,
   FaPencilAlt,
   FaPrint,
@@ -56,8 +47,6 @@ export const HeaderLink = ({ linkTo, description, icon }: HeaderLinkProp) => {
 };
 
 const Header = () => {
-  const navigate = useNavigate();
-
   return (
     <Flex p={5} backgroundColor='black' flexDirection='row'>
       <Heading mr={10}>Book Shelf</Heading>

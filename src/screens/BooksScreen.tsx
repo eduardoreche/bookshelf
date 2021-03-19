@@ -15,12 +15,7 @@ import {
 import { useForm } from 'react-hook-form';
 import { useSelector, useDispatch } from 'react-redux';
 
-import {
-  fetchBooks,
-  updateBook,
-  addBook,
-  deleteBook,
-} from '../store/actions/bookActions';
+import { fetchBooks, updateBook, addBook } from '../store/actions/bookActions';
 import Book, { BookAuthor } from '../models/Book';
 import { RootState } from '../store/reducers';
 import {
@@ -35,7 +30,6 @@ import BookAuthors from '../components/bookAuthors';
 import BookList from '../components/bookList';
 import Autocomplete from '../components/inputs/Autocomplete';
 import { RouteComponentProps } from '@reach/router';
-import Header from '../components/header';
 import PageLayout from '../components/pageLayout';
 
 const BooksScreen = ({ path, uri }: RouteComponentProps) => {
@@ -65,7 +59,6 @@ const BooksScreen = ({ path, uri }: RouteComponentProps) => {
   }, [isInitialized, dispatch, books]);
 
   const onSubmit = async (data: Book) => {
-    debugger;
     bookAuthors.map((a) => dispatch(authorsFindOrCreate(a.author)));
     dispatch(publishersFindOrCreate(data.publisher));
     const newBook = {
@@ -80,12 +73,6 @@ const BooksScreen = ({ path, uri }: RouteComponentProps) => {
     reset();
     setShouldClear(true);
     showToast('Book saved', "You've succesffuly saved an book");
-  };
-
-  const onDelete = async (id: string) => {
-    await setBook(undefined);
-    dispatch(deleteBook(id));
-    showToast('Delete book', "You've succesffuly deleted an book");
   };
 
   const showToast = (title: string, description: string) =>

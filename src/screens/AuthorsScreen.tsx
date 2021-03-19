@@ -26,7 +26,6 @@ import {
 } from '../store/actions/authorActions';
 import { RootState } from '../store/reducers';
 import { AddIcon } from '@chakra-ui/icons';
-import Header from '../components/header';
 import PageLayout from '../components/pageLayout';
 
 const AuthorForm: React.FC = () => {

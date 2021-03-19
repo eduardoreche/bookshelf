@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 import {
   Box,
   Flex,
@@ -7,11 +7,10 @@ import {
   Square,
   Stack,
   Text,
-} from "@chakra-ui/react";
+} from '@chakra-ui/react';
 
-import Book from "../models/Book";
-import { DeleteIcon, EditIcon } from "@chakra-ui/icons";
-import { useNavigate } from "@reach/router";
+import Book from '../models/Book';
+import { DeleteIcon, EditIcon } from '@chakra-ui/icons';
 
 type BookListProp = {
   books: Book[];
@@ -20,7 +19,6 @@ type BookListProp = {
 };
 
 const BookList = ({ books, onEdit, onDelete }: BookListProp) => {
-  const navigate = useNavigate();
   return (
     <Flex>
       {books &&

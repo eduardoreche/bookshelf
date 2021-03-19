@@ -1,42 +1,23 @@
-import React, { useEffect } from 'react';
-import { Box, Flex } from '@chakra-ui/react';
-import { Router, RouteComponentProps, useNavigate } from '@reach/router';
+import React from 'react';
+import { Flex } from '@chakra-ui/react';
+import { Router, RouteComponentProps } from '@reach/router';
 
 import AuthorsScreen from './AuthorsScreen';
 import PublishersScreen from './PublishersScreen';
 import BooksScreen from './BooksScreen';
 import LoginScreen from './LoginScreen';
 
-import BookList from '../components/bookList';
-import { useDispatch, useSelector } from 'react-redux';
-import { RootState } from '../store/reducers';
-import { fetchBooks } from '../store/actions/bookActions';
 import { useAuth } from '../context/AuthContext';
-import Header from '../components/header';
+import HomeScreen from './HomeScreen';
 
-const MainHeader = (props: RouteComponentProps) => {
-  const { books } = useSelector((state: RootState) => state.books);
-
-  return (
-    <>
-      <Header />
-      <BookList books={books} />
-    </>
-  );
-};
-
+const MainHeader = (props: RouteComponentProps) => <HomeScreen />;
 const AuthorRoute = (props: RouteComponentProps) => <AuthorsScreen />;
 const PublisherRoute = (props: RouteComponentProps) => <PublishersScreen />;
 const BookRoute = (props: RouteComponentProps) => <BooksScreen />;
 const LoginRoute = (props: RouteComponentProps) => <LoginScreen />;
 
 const Main: React.FC = () => {
-  const dispatch = useDispatch();
-  const { currentUser, logout, isLogingIn } = useAuth();
-
-  useEffect(() => {
-    dispatch(fetchBooks());
-  }, []);
+  const { currentUser } = useAuth();
 
   const privateRoutes = () => (
     <Router>

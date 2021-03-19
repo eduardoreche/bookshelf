@@ -27,7 +27,6 @@ import {
 import { RootState } from '../store/reducers';
 import { useContext } from 'react';
 import { AddIcon } from '@chakra-ui/icons';
-import Header from '../components/header';
 import PageLayout from '../components/pageLayout';
 
 const PublisherForm: React.FC = () => {
