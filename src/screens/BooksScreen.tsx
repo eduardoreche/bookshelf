@@ -27,10 +27,10 @@ import {
   findOrCreate as publishersFindOrCreate,
 } from '../store/actions/publisherActions';
 import BookAuthors from '../components/bookAuthors';
-import BookList from '../components/bookList';
 import Autocomplete from '../components/inputs/Autocomplete';
 import { RouteComponentProps } from '@reach/router';
 import PageLayout from '../components/pageLayout';
+import BookList from '../components/bookList';
 
 const BooksScreen = ({ path, uri }: RouteComponentProps) => {
   const { books } = useSelector((state: RootState) => state.books);
@@ -68,6 +68,8 @@ const BooksScreen = ({ path, uri }: RouteComponentProps) => {
 
     if (data.id) await dispatch(updateBook(newBook));
     else await dispatch(addBook(newBook));
+
+    dispatch(fetchBooks());
 
     setBook(undefined);
     reset();
@@ -125,7 +127,7 @@ const BooksScreen = ({ path, uri }: RouteComponentProps) => {
 
       <FormControl id='price'>
         <FormLabel>Price</FormLabel>
-        <Input type='number' name='price' ref={register} />
+        <Input type='number' name='price' step='.01' ref={register} />
       </FormControl>
 
       <FormControl id='stars'>
@@ -143,8 +145,13 @@ const BooksScreen = ({ path, uri }: RouteComponentProps) => {
         <Input type='number' name='imprint' ref={register} />
       </FormControl>
 
+      <FormControl id='cover'>
+        <FormLabel>Cover</FormLabel>
+        <Input type='file' multiple name='cover' ref={register} />
+      </FormControl>
+
       <Button mt={10} colorScheme='blue' type='submit'>
-        Save
+        SaveP
       </Button>
       <Button ml={5} variant='outline' mt={10} type='reset'>
         Cancel
@@ -177,11 +184,7 @@ const BooksScreen = ({ path, uri }: RouteComponentProps) => {
         </Box>
       </Flex>
 
-      <BookList
-        books={books}
-        onEdit={(book) => setBook(book)}
-        onDelete={(id) => console.log('delete', id)}
-      />
+      <BookList books={books} />
     </PageLayout>
   );
 };

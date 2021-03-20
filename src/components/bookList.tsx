@@ -1,71 +1,56 @@
 import React from 'react';
 import {
   Box,
-  Flex,
-  HStack,
+  Table,
+  Thead,
+  Tr,
+  Th,
+  Tbody,
+  Td,
+  Tag,
   IconButton,
-  Square,
-  Stack,
-  Text,
 } from '@chakra-ui/react';
+import { CloseIcon } from '@chakra-ui/icons';
 
 import Book from '../models/Book';
-import { DeleteIcon, EditIcon } from '@chakra-ui/icons';
 
-type BookListProp = {
+type BookListProps = {
   books: Book[];
-  onEdit?: (book: Book) => void;
-  onDelete?: (id: string) => void;
 };
 
-const BookList = ({ books, onEdit, onDelete }: BookListProp) => {
+const BookList = ({ books }: BookListProps) => {
   return (
-    <Flex>
-      {books &&
-        books.map((book) => (
-          <Box
-            w={200}
-            minHeight={300}
-            bgColor='blue.500'
-            key={book.id}
-            borderRadius='md'
-            m={2}
-            p={4}
-          >
-            <Flex direction='column'>
-              <Square size={168} bg='tomato' borderRadius='md'>
-                <Text align='center' fontSize='lg' fontWeight='bold'>
-                  {book.name}
-                </Text>
-              </Square>
-
-              <Stack>
-                {book.authors?.map((a) => (
-                  <Text key={a.author}>{a.author}</Text>
-                ))}
-              </Stack>
-              {onEdit && onDelete && (
-                <HStack>
-                  <IconButton
-                    aria-label='Delete'
-                    variant='outline'
-                    colorScheme='yellow'
-                    onClick={() => onEdit(book)}
-                    icon={<EditIcon />}
-                  />
+    <Box w='100%'>
+      {books.length > 0 && (
+        <Table variant='striped' colorScheme='gray' m={3}>
+          <Thead>
+            <Tr>
+              <Th>Name</Th>
+              <Th>Volume</Th>
+              <Th>Language</Th>
+              <Th></Th>
+            </Tr>
+          </Thead>
+          <Tbody>
+            {books.map((book) => (
+              <Tr key={book.id}>
+                <Td>{book.name}</Td>
+                <Td>{book.volume}</Td>
+                <Td>{book.language}</Td>
+                <Td>
                   <IconButton
                     aria-label='Delete'
                     variant='outline'
                     colorScheme='red'
-                    onClick={() => (book.id ? onDelete(book.id) : null)}
-                    icon={<DeleteIcon />}
+                    icon={<CloseIcon />}
                   />
-                </HStack>
-              )}
-            </Flex>
-          </Box>
-        ))}
-    </Flex>
+                </Td>
+              </Tr>
+            ))}
+          </Tbody>
+        </Table>
+      )}
+    </Box>
   );
 };
 

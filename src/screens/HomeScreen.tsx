@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import BookList from '../components/bookList';
+import BookGrid from '../components/bookGrid';
 import Header from '../components/header';
 import { fetchBooks } from '../store/actions/bookActions';
 import { RootState } from '../store/reducers';
@@ -20,7 +20,7 @@ const HomeScreen = () => {
   return (
     <>
       <Header />
-      <BookList books={books} />
+      <BookGrid books={books} />
     </>
   );
 };
