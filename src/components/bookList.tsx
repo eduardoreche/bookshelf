@@ -7,7 +7,6 @@ import {
   Th,
   Tbody,
   Td,
-  Tag,
   IconButton,
 } from '@chakra-ui/react';
 import { CloseIcon } from '@chakra-ui/icons';
