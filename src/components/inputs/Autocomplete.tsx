@@ -1,11 +1,12 @@
-import React, { useEffect, useState } from "react";
-import { FormControl, Input, List, ListItem } from "@chakra-ui/react";
+import React, { useEffect, useState } from 'react';
+import { FormControl, Input, List, ListItem } from '@chakra-ui/react';
 
-import FormLabel from "./Label";
-import TableModel from "../../models/TableModel";
+import FormLabel from './Label';
+import TableModel from '../../models/TableModel';
 
 type AutocompleteProps = {
   name: string;
+  value?: string;
   placeholder: string;
   items: TableModel[];
   clear: boolean;
@@ -20,6 +21,7 @@ type AutocompleteProps = {
 
 const Autocomplete = ({
   name,
+  value,
   placeholder,
   items,
   onChange,
@@ -27,41 +29,45 @@ const Autocomplete = ({
   register,
 }: AutocompleteProps) => {
   const [filteredList, setFilteredList] = useState<string[]>([]);
-  const [value, setValue] = useState<string>("");
+  const [inputValue, setInputValue] = useState<string>('');
   const [displayOptions, setDisplayOptions] = useState(false);
 
   useEffect(() => {
-    if (value.length <= 0) setFilteredList([]);
+    if (value) setInputValue(value);
+  }, [value]);
+
+  useEffect(() => {
+    if (inputValue.length <= 0) setFilteredList([]);
     else
       setFilteredList(
         items
           .filter((item) =>
-            item.name.toLowerCase().includes(value.toLowerCase())
+            item.name.toLowerCase().includes(inputValue.toLowerCase())
           )
           .map((item) => item.name)
       );
 
-    if (onChange) onChange(value);
-  }, [value, items, onChange]);
+    if (onChange) onChange(inputValue);
+  }, [inputValue, items, onChange]);
 
   useEffect(() => {
-    if (clear) setValue("");
+    if (clear) setInputValue('');
   }, [clear]);
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setValue(event.target.value);
+    setInputValue(event.target.value);
     setDisplayOptions(true);
   };
 
   const handleSelect = (item: string) => {
-    setValue(item);
+    setInputValue(item);
     setDisplayOptions(false);
   };
 
   const handleFocus = (event: React.FocusEvent<HTMLInputElement>) => {
     setTimeout(() => {
-      if (event.type === "blur") setDisplayOptions(false);
-      if (event.type === "focus") setDisplayOptions(true);
+      if (event.type === 'blur') setDisplayOptions(false);
+      if (event.type === 'focus') setDisplayOptions(true);
     }, 300);
   };
 
@@ -75,7 +81,7 @@ const Autocomplete = ({
         onChange={handleChange}
         placeholder={placeholder}
         autoComplete='off'
-        value={value}
+        value={inputValue}
         onFocus={handleFocus}
         onBlur={handleFocus}
         ref={register}
@@ -94,7 +100,7 @@ const Autocomplete = ({
             <ListItem
               key={item}
               onClick={(_) => handleSelect(item)}
-              _hover={{ bg: "gray.100", color: "black" }}
+              _hover={{ bg: 'gray.100', color: 'black' }}
               cursor='pointer'
             >
               {item}

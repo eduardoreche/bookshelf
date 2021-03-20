@@ -1,28 +1,27 @@
-import React, { useState } from "react";
-import {
-  Table,
-  Thead,
-  Tbody,
-  Tr,
-  Th,
-  Td,
-  IconButton,
-  Flex,
-} from "@chakra-ui/react";
-import { DeleteIcon, EditIcon } from "@chakra-ui/icons";
-import Confirm from "./confirm";
+import React, { useState } from 'react';
+import { Table, Thead, Tbody, Tr, Th, Td, Flex } from '@chakra-ui/react';
+import { CopyIcon, DeleteIcon, EditIcon } from '@chakra-ui/icons';
+import Confirm from './confirm';
+import ActionButton from './actionButton';
 
 type TableProps = {
   items: any[];
   columns: string[];
   onEdit: (item: any) => void;
   onDelete: (id: string) => void;
+  onDuplicate?: (item: any) => void;
 };
 
-const ActionTable = ({ items, columns, onEdit, onDelete }: TableProps) => {
+const ActionTable = ({
+  items,
+  columns,
+  onEdit,
+  onDelete,
+  onDuplicate,
+}: TableProps) => {
   const [askConfirmation, setAskConfirmation] = useState(false);
-  const [confirmName, setConfirmName] = useState("");
-  const [confirmId, setConfirmId] = useState("");
+  const [confirmName, setConfirmName] = useState('');
+  const [confirmId, setConfirmId] = useState('');
 
   const confirmDeleteClose = (confirmed: boolean) => {
     if (confirmed) onDelete(confirmId);
@@ -49,18 +48,15 @@ const ActionTable = ({ items, columns, onEdit, onDelete }: TableProps) => {
                 ))}
                 <Td>
                   <Flex justifyItems='flex-end'>
-                    <IconButton
-                      mr={2}
-                      variant='outline'
-                      colorScheme='blue'
-                      aria-label='Edit'
-                      icon={<EditIcon />}
+                    <ActionButton
+                      label='Edit'
+                      colorScheme='yellow'
                       onClick={() => onEdit(item)}
+                      icon={<EditIcon />}
                     />
 
-                    <IconButton
-                      aria-label='Delete'
-                      variant='outline'
+                    <ActionButton
+                      label='Delete'
                       colorScheme='red'
                       onClick={() => {
                         setConfirmId(item.id);
@@ -69,6 +65,15 @@ const ActionTable = ({ items, columns, onEdit, onDelete }: TableProps) => {
                       }}
                       icon={<DeleteIcon />}
                     />
+
+                    {onDuplicate && (
+                      <ActionButton
+                        label='Delete'
+                        colorScheme='blue'
+                        onClick={() => onDuplicate(item)}
+                        icon={<CopyIcon />}
+                      />
+                    )}
                   </Flex>
                 </Td>
               </Tr>

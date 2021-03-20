@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { AddIcon } from '@chakra-ui/icons';
+import { AddIcon, CopyIcon } from '@chakra-ui/icons';
 import {
   Box,
   Heading,
@@ -30,12 +30,11 @@ import BookAuthors from '../components/bookAuthors';
 import Autocomplete from '../components/inputs/Autocomplete';
 import { RouteComponentProps } from '@reach/router';
 import PageLayout from '../components/pageLayout';
-import BookList from '../components/bookList';
+import ActionTable from '../components/actionTable';
 
 const BooksScreen = ({ path, uri }: RouteComponentProps) => {
   const { books } = useSelector((state: RootState) => state.books);
   const { publishers } = useSelector((state: RootState) => state.publishers);
-  const { authors } = useSelector((state: RootState) => state.authors);
 
   const [book, setBook] = useState<Book | undefined>(undefined);
   const [shouldClear, setShouldClear] = useState(false);
@@ -46,7 +45,7 @@ const BooksScreen = ({ path, uri }: RouteComponentProps) => {
   const [isInitialized, setIsInitialized] = useState(false);
   const dispatch = useDispatch();
 
-  const { register, handleSubmit, reset } = useForm<Book>();
+  const { register, setValue, handleSubmit, reset } = useForm<Book>();
 
   useEffect(() => {
     if (!isInitialized) {
@@ -77,6 +76,28 @@ const BooksScreen = ({ path, uri }: RouteComponentProps) => {
     showToast('Book saved', "You've succesffuly saved an book");
   };
 
+  const onReset = () => {
+    setBookAuthors([]);
+    setShouldClear(true);
+  };
+
+  const onDelete = async (id: string) => {
+    await setBook(undefined);
+    dispatch(deleteBoook(id));
+    showToast('Delete book', "You've succesffuly deleted a book");
+  };
+
+  const onDuplicate = (aBook: Book) => {
+    const fields: Array<Array<string>> = Object.entries(aBook).filter(
+      (entry) => entry[0] !== 'id'
+    );
+
+    fields.forEach((entry) => setValue(entry[0], entry[1]));
+    setBookAuthors(aBook.authors);
+
+    setBook({ ...aBook, id: undefined });
+  };
+
   const showToast = (title: string, description: string) =>
     toast({
       title,
@@ -87,16 +108,6 @@ const BooksScreen = ({ path, uri }: RouteComponentProps) => {
       position: 'bottom-left',
     });
 
-  const renderAuthors = () => (
-    <Box mt={3} mb={3} p={10} bg='#546177' borderRadius='lg'>
-      <BookAuthors
-        authors={authors}
-        onChange={(value) => setBookAuthors(value)}
-        shouldClear={shouldClear}
-      />
-    </Box>
-  );
-
   const renderForm = () => (
     <form onSubmit={handleSubmit(onSubmit)}>
       <input type='hidden' name='id' ref={register} />
@@ -105,10 +116,19 @@ const BooksScreen = ({ path, uri }: RouteComponentProps) => {
         <Input type='text' name='name' ref={register} />
       </FormControl>
 
-      {renderAuthors()}
+      <Box mt={3} mb={3} p={10} bg='#546177' borderRadius='lg'>
+        <BookAuthors
+          authors={book?.authors}
+          onChange={(value) => {
+            setBookAuthors(value);
+          }}
+          shouldClear={shouldClear}
+        />
+      </Box>
 
       <Autocomplete
         name='publisher'
+        value={book?.publisher}
         items={publishers}
         placeholder="Type publisher's name"
         register={register}
@@ -151,9 +171,15 @@ const BooksScreen = ({ path, uri }: RouteComponentProps) => {
       </FormControl>
 
       <Button mt={10} colorScheme='blue' type='submit'>
-        SaveP
+        Save
       </Button>
-      <Button ml={5} variant='outline' mt={10} type='reset'>
+      <Button
+        ml={5}
+        variant='outline'
+        mt={10}
+        type='reset'
+        onClick={() => onReset()}
+      >
         Cancel
       </Button>
     </form>
@@ -165,7 +191,7 @@ const BooksScreen = ({ path, uri }: RouteComponentProps) => {
 
       <Flex justifyContent='space-between'>
         <Text fontSize='2xl' mr={10}>
-          {book ? 'Edit' : 'New'} Book
+          {book?.id ? 'Edit' : 'New'} Book
         </Text>
 
         <IconButton
@@ -184,9 +210,21 @@ const BooksScreen = ({ path, uri }: RouteComponentProps) => {
         </Box>
       </Flex>
 
-      <BookList books={books} />
+      <Box pt={10}>
+        <Heading>Book list</Heading>
+        <ActionTable
+          items={books}
+          columns={['name', 'valume', 'language']}
+          onEdit={(book: Book) => setBook(book)}
+          onDelete={onDelete}
+          onDuplicate={onDuplicate}
+        />
+      </Box>
     </PageLayout>
   );
 };
 
 export default BooksScreen;
+function deleteBoook(id: string): any {
+  throw new Error('Function not implemented.');
+}

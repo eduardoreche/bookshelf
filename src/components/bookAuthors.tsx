@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 import {
   Box,
   Checkbox,
@@ -11,16 +12,16 @@ import {
   Tbody,
   Td,
   Tag,
-} from "@chakra-ui/react";
+} from '@chakra-ui/react';
 
-import Author from "../models/Author";
-import { BookAuthor } from "../models/Book";
-import { ArrowForwardIcon, CloseIcon } from "@chakra-ui/icons";
-import { useForm } from "react-hook-form";
-import Autocomplete from "./inputs/Autocomplete";
+import { RootState } from '../store/reducers';
+import { BookAuthor } from '../models/Book';
+import { ArrowForwardIcon, CloseIcon } from '@chakra-ui/icons';
+import { useForm } from 'react-hook-form';
+import Autocomplete from './inputs/Autocomplete';
 
 type BookAuthorsProps = {
-  authors: Author[];
+  authors?: BookAuthor[];
   onChange: (bookAuthors: BookAuthor[]) => void;
   shouldClear: boolean;
 };
@@ -31,7 +32,11 @@ type FormType = {
 };
 
 const BookAuthors = ({ authors, onChange, shouldClear }: BookAuthorsProps) => {
-  const authorCredits: string[] = ["Story", "Art", "Colors", "Letter", "Cover"];
+  const authorCredits: string[] = ['Story', 'Art', 'Colors', 'Letter', 'Cover'];
+
+  const { authors: authoursSource } = useSelector(
+    (state: RootState) => state.authors
+  );
 
   const [bookAuthors, setBookAuthors] = useState<BookAuthor[]>([]);
 
@@ -42,8 +47,12 @@ const BookAuthors = ({ authors, onChange, shouldClear }: BookAuthorsProps) => {
   }, [bookAuthors, onChange]);
 
   useEffect(() => {
+    if (authors) setBookAuthors(authors);
+  }, [authors]);
+
+  useEffect(() => {
     if (shouldClear) {
-      setBookAuthors([]);
+      // setBookAuthors([]);
     }
   }, [shouldClear]);
 
@@ -56,8 +65,8 @@ const BookAuthors = ({ authors, onChange, shouldClear }: BookAuthorsProps) => {
       ]);
     }
 
-    setValue("author", "");
-    setValue("credits", undefined);
+    setValue('author', '');
+    setValue('credits', undefined);
   };
 
   const removeAuthor = (bookAuthor: BookAuthor) => {
@@ -71,7 +80,7 @@ const BookAuthors = ({ authors, onChange, shouldClear }: BookAuthorsProps) => {
       <Stack>
         <Autocomplete
           name='author'
-          items={authors}
+          items={authoursSource}
           placeholder="Type author's name"
           register={register}
           clear={shouldClear}
@@ -118,7 +127,7 @@ const BookAuthors = ({ authors, onChange, shouldClear }: BookAuthorsProps) => {
                   <Td>{bookAuthor.author}</Td>
                   <Td>
                     {bookAuthor.credits.map((credit) => (
-                      <Tag m={1} colorScheme='blue'>
+                      <Tag m={1} colorScheme='blue' key={credit}>
                         {credit}
                       </Tag>
                     ))}
