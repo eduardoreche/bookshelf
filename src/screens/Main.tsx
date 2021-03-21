@@ -39,7 +39,7 @@ const Main: React.FC = () => {
     </Flex>
   );
 
-  return currentUser ? privateRoutes() : publicRoutes();
+  return !currentUser ? publicRoutes() : privateRoutes();
 };
 
 export default Main;

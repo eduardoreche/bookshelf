@@ -14,10 +14,10 @@ jobs:
       - uses: borales/actions-yarn@v2.0.0
         with:
           cmd: build
-      - uses: FirebaseExtended/action-hosting-deploy@v0
-        with:
-          repoToken: '${{ secrets.GITHUB_TOKEN }}'
-          firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_BOOK_SHELF_3F772 }}'
-          projectId: book-shelf-3f772
-        env:
-          FIREBASE_CLI_PREVIEWS: hostingchannels
+      # - uses: FirebaseExtended/action-hosting-deploy@v0
+      #   with:
+      #     repoToken: '${{ secrets.GITHUB_TOKEN }}'
+      #     firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_BOOK_SHELF_3F772 }}'
+      #     projectId: book-shelf-3f772
+      #   env:
+      #     FIREBASE_CLI_PREVIEWS: hostingchannels
