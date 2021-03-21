@@ -13,7 +13,6 @@ import {
 import {
   FaBook,
   FaBox,
-  FaBoxes,
   FaHome,
   FaPencilAlt,
   FaPrint,

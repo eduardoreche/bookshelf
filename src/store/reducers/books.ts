@@ -7,7 +7,6 @@ import {
 } from '../types/bookTypes';
 
 import Book from '../../models/Book';
-import BookAuthors from '../../components/bookAuthors';
 
 const initialState = {
   books: [] as Book[],

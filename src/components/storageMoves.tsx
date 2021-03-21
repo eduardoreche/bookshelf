@@ -2,12 +2,10 @@ import React, { useEffect, useState } from 'react';
 import {
   Box,
   Heading,
-  Input,
   SimpleGrid,
   Table,
   Tbody,
   Td,
-  Text,
   Th,
   Thead,
   Tr,
@@ -20,7 +18,6 @@ import { RootState } from '../store/reducers';
 import ActionButton from './actionButton';
 import { ArrowBackIcon, ArrowForwardIcon } from '@chakra-ui/icons';
 import { updateBook } from '../store/actions/bookActions';
-import { debounce } from '../utils/debounce';
 
 type StorageMovesProp = {
   storage: Storage;
