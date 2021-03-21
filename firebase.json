@@ -4,11 +4,11 @@
   },
   "functions": {
     "predeploy": [
-      "yarn --prefix \"$RESOURCE_DIR\" run build"
+      "yarn --prefix \"$RESOURCE_DIR\" build"
     ]
   },
   "hosting": {
-    "public": "public",
+    "public": "build",
     "ignore": [
       "firebase.json",
       "**/.*",

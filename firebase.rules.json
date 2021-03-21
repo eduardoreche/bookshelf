@@ -18,6 +18,16 @@
         ".indexOn": "name"
       }
     },
+
+    "storages": {
+			".read": "false",
+      ".write": "false",
+      "$id": {
+        ".write": "auth.uid === $id",
+        ".read": "auth.uid === $id",
+        ".indexOn": "name"
+      }
+    },
       
     "authors": {
 			".read": "false",
