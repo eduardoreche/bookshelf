@@ -4,12 +4,13 @@ import {
   UPDATE_BOOK,
   BookActionTypes,
   DELETE_BOOK,
-} from "../types/bookTypes";
+} from '../types/bookTypes';
 
-import Book from "../../models/Book";
+import Book from '../../models/Book';
+import BookAuthors from '../../components/bookAuthors';
 
 const initialState = {
-  books: [],
+  books: [] as Book[],
 };
 
 const reducer = (state = initialState, action: BookActionTypes) => {

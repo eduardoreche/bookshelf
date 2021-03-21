@@ -1,8 +1,17 @@
 import React from 'react';
-import { AspectRatio, Text, Badge, Box, Center, Image } from '@chakra-ui/react';
+import {
+  AspectRatio,
+  Text,
+  Badge,
+  Box,
+  Center,
+  Image,
+  Icon,
+} from '@chakra-ui/react';
 import { StarIcon } from '@chakra-ui/icons';
 
 import Book from '../models/Book';
+import { FaBox } from 'react-icons/fa';
 
 type BookTileProps = {
   book: Book;
@@ -63,6 +72,13 @@ const BookTile = ({ book }: BookTileProps) => {
             </Box>
           ))}
         </Box>
+
+        {book.storage && (
+          <Box mt={2} color='gray.300' fontSize='sm'>
+            <Icon as={FaBox} w={4} h={4} mr={2} />
+            {book.storage}
+          </Box>
+        )}
 
         <Box d='flex' mt='2' alignItems='center'>
           {Array(5)

@@ -1,6 +1,4 @@
 import TableModel from './TableModel';
-import Author from './Author';
-import Publisher from './Publisher';
 
 export interface BookAuthor {
   author: string;
@@ -19,4 +17,5 @@ export default interface Book extends TableModel {
   comments: string;
   cover?: FileList;
   imageUrls: string[];
+  storage?: string;
 }

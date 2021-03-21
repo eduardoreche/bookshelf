@@ -1,8 +1,19 @@
-import React, { useState } from 'react';
-import { Table, Thead, Tbody, Tr, Th, Td, Flex } from '@chakra-ui/react';
-import { CopyIcon, DeleteIcon, EditIcon } from '@chakra-ui/icons';
+import React, { useEffect, useState } from 'react';
+import {
+  Table,
+  Thead,
+  Tbody,
+  Tr,
+  Th,
+  Td,
+  Flex,
+  Box,
+  Heading,
+} from '@chakra-ui/react';
+import { CopyIcon, DeleteIcon, EditIcon, SettingsIcon } from '@chakra-ui/icons';
 import Confirm from './confirm';
 import ActionButton from './actionButton';
+import { sortObjectArray } from '../utils/sort';
 
 type TableProps = {
   items: any[];
@@ -10,6 +21,8 @@ type TableProps = {
   onEdit: (item: any) => void;
   onDelete: (id: string) => void;
   onDuplicate?: (item: any) => void;
+  onMore?: (item: any) => void;
+  orderBy?: string;
 };
 
 const ActionTable = ({
@@ -18,10 +31,19 @@ const ActionTable = ({
   onEdit,
   onDelete,
   onDuplicate,
+  orderBy,
+  onMore,
 }: TableProps) => {
   const [askConfirmation, setAskConfirmation] = useState(false);
   const [confirmName, setConfirmName] = useState('');
   const [confirmId, setConfirmId] = useState('');
+  const [sortedItems, setSortedItems] = useState<any[]>([]);
+
+  useEffect(() => {
+    const sortField = orderBy || columns[0];
+
+    setSortedItems(sortObjectArray(items, sortField));
+  }, [orderBy, items, columns]);
 
   const confirmDeleteClose = (confirmed: boolean) => {
     if (confirmed) onDelete(confirmId);
@@ -29,7 +51,11 @@ const ActionTable = ({
   };
 
   return (
-    <>
+    <Box pb={20}>
+      <Heading as='h4' mb={10}>
+        Items {sortedItems.length > 10 ? `(${sortedItems.length})` : ''}
+      </Heading>
+
       <Table variant='striped' colorScheme='gray'>
         <Thead>
           <Tr>
@@ -40,8 +66,8 @@ const ActionTable = ({
           </Tr>
         </Thead>
         <Tbody>
-          {items &&
-            items.map((item) => (
+          {sortedItems &&
+            sortedItems.map((item) => (
               <Tr key={item.id}>
                 {columns.map((column) => (
                   <Td key={column}>{item[column]}</Td>
@@ -74,6 +100,15 @@ const ActionTable = ({
                         icon={<CopyIcon />}
                       />
                     )}
+
+                    {onMore && (
+                      <ActionButton
+                        label='more'
+                        colorScheme='green'
+                        onClick={() => onMore(item)}
+                        icon={<SettingsIcon />}
+                      />
+                    )}
                   </Flex>
                 </Td>
               </Tr>
@@ -87,7 +122,7 @@ const ActionTable = ({
         isOpen={askConfirmation}
         onClose={confirmDeleteClose}
       />
-    </>
+    </Box>
   );
 };
 

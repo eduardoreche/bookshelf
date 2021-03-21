@@ -12,6 +12,8 @@ import {
 } from '@chakra-ui/react';
 import {
   FaBook,
+  FaBox,
+  FaBoxes,
   FaHome,
   FaPencilAlt,
   FaPrint,
@@ -69,6 +71,7 @@ const Header = () => {
           description='Publishers'
           icon={FaPrint}
         />
+        <HeaderLink linkTo='/storages' description='Storages' icon={FaBox} />
       </Flex>
 
       <Spacer />

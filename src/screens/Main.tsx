@@ -6,13 +6,15 @@ import AuthorsScreen from './AuthorsScreen';
 import PublishersScreen from './PublishersScreen';
 import BooksScreen from './BooksScreen';
 import LoginScreen from './LoginScreen';
+import HomeScreen from './HomeScreen';
+import StorageScreen from './StorageScreen';
 
 import { useAuth } from '../context/AuthContext';
-import HomeScreen from './HomeScreen';
 
 const MainHeader = (props: RouteComponentProps) => <HomeScreen />;
 const AuthorRoute = (props: RouteComponentProps) => <AuthorsScreen />;
 const PublisherRoute = (props: RouteComponentProps) => <PublishersScreen />;
+const StorageRoute = (props: RouteComponentProps) => <StorageScreen />;
 const BookRoute = (props: RouteComponentProps) => <BooksScreen />;
 const LoginRoute = (props: RouteComponentProps) => <LoginScreen />;
 
@@ -25,6 +27,7 @@ const Main: React.FC = () => {
       <BookRoute path='/books' />
       <AuthorRoute path='/authors' />
       <PublisherRoute path='/publishers' />
+      <StorageRoute path='/storages' />
     </Router>
   );
 
