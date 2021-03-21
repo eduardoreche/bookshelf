@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { AddIcon, CopyIcon } from '@chakra-ui/icons';
+import { AddIcon } from '@chakra-ui/icons';
 import {
   Box,
   Heading,
@@ -15,7 +15,12 @@ import {
 import { useForm } from 'react-hook-form';
 import { useSelector, useDispatch } from 'react-redux';
 
-import { fetchBooks, updateBook, addBook } from '../store/actions/bookActions';
+import {
+  fetchBooks,
+  updateBook,
+  addBook,
+  deleteBook,
+} from '../store/actions/bookActions';
 import Book, { BookAuthor } from '../models/Book';
 import { RootState } from '../store/reducers';
 import {
@@ -83,19 +88,29 @@ const BooksScreen = ({ path, uri }: RouteComponentProps) => {
 
   const onDelete = async (id: string) => {
     await setBook(undefined);
-    dispatch(deleteBoook(id));
+    dispatch(deleteBook(id));
     showToast('Delete book', "You've succesffuly deleted a book");
   };
 
-  const onDuplicate = (aBook: Book) => {
-    const fields: Array<Array<string>> = Object.entries(aBook).filter(
-      (entry) => entry[0] !== 'id'
+  const onEdit = (aBook: Book) => {
+    const fields: Array<Array<string>> = Object.entries(aBook).map(
+      (entry) => entry
     );
 
     fields.forEach((entry) => setValue(entry[0], entry[1]));
+    setValue('imageUrls', null);
+    setValue('cover', null);
     setBookAuthors(aBook.authors);
 
-    setBook({ ...aBook, id: undefined });
+    setBook({ ...aBook, id: undefined, imageUrls: [] });
+  };
+
+  const onDuplicate = (aBook: Book) => {
+    onEdit(aBook);
+
+    setValue('id', undefined);
+
+    if (book) setBook({ ...book, id: undefined });
   };
 
   const showToast = (title: string, description: string) =>
@@ -157,7 +172,7 @@ const BooksScreen = ({ path, uri }: RouteComponentProps) => {
 
       <FormControl id='volume'>
         <FormLabel>Volume</FormLabel>
-        <Input type='number' name='volume' ref={register} />
+        <Input type='text' name='volume' ref={register} />
       </FormControl>
 
       <FormControl id='imprint'>
@@ -214,8 +229,8 @@ const BooksScreen = ({ path, uri }: RouteComponentProps) => {
         <Heading>Book list</Heading>
         <ActionTable
           items={books}
-          columns={['name', 'valume', 'language']}
-          onEdit={(book: Book) => setBook(book)}
+          columns={['name', 'volume', 'language']}
+          onEdit={(book: Book) => onEdit(book)}
           onDelete={onDelete}
           onDuplicate={onDuplicate}
         />
@@ -225,6 +240,3 @@ const BooksScreen = ({ path, uri }: RouteComponentProps) => {
 };
 
 export default BooksScreen;
-function deleteBoook(id: string): any {
-  throw new Error('Function not implemented.');
-}

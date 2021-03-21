@@ -81,9 +81,19 @@ export const updateBook = (book: Book): AppThunk => async (dispatch) => {
 export const deleteBook = (id: string): AppThunk => async (dispatch) => {
   const url = await getUrl(COLLECTION_NAME, id);
   await axios.delete(url);
+  deleteImages(id);
 
   return dispatch({
     type: DELETE_BOOK,
     payload: id,
   });
+};
+
+const deleteImages = (id: string) => {
+  try {
+    const storageRef = storage.ref(id);
+    storageRef.delete();
+  } catch (error) {
+    //do nothing
+  }
 };

@@ -32,7 +32,14 @@ type FormType = {
 };
 
 const BookAuthors = ({ authors, onChange, shouldClear }: BookAuthorsProps) => {
-  const authorCredits: string[] = ['Story', 'Art', 'Colors', 'Letter', 'Cover'];
+  const authorCredits: string[] = [
+    'Story',
+    'Art',
+    'Adaptation',
+    'Colors',
+    'Letter',
+    'Cover',
+  ];
 
   const { authors: authoursSource } = useSelector(
     (state: RootState) => state.authors
